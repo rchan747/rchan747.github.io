@@ -7,7 +7,7 @@
   <meta name="description" content="747 — Canadian DJ and producer. Acid techno, trance, jungle.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Datatype&family=EB+Garamond:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/feather-icons"></script>
   <style>
     :root {
@@ -18,7 +18,7 @@
       --panel-bg: rgba(198,198,198,0.92);
       --panel-fg: rgba(0,0,0,0.85);
       --mono: 'Space Mono', monospace;
-      --nav-font: 'Trebuchet MS', monospace;
+      --nav-font: 'Datatype', monospace;
       --serif: 'EB Garamond', serif;
     }
  
@@ -49,7 +49,7 @@
       padding: 0.9rem 1.5rem;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       pointer-events: none;
     }
  
@@ -61,6 +61,7 @@
       font-family: var(--nav-font);
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      margin-top: 2rem;
     }
  
     #nav-links a {
@@ -80,8 +81,9 @@
       background: white;
       color: rgba(0,0,0,0.85);
       padding: 0.1rem 0.5rem;
+      align-self: flex-end; /* or use margin-top instead */
+      margin-top: 2rem; /* adjust to taste */
       margin-right: 2rem;
-      margin-top: 2rem;
       text-decoration: none;
       filter: drop-shadow(0.25rem 0.25rem 0 rgba(0,0,0,0.5));
     }
@@ -95,7 +97,7 @@
       position: relative;
       width: 100vw;
       min-height: 100vh;
-      padding-top: 12%;
+      padding-top: 7%;
       overflow: hidden;
     }
  
@@ -214,8 +216,10 @@
       transition: filter 0.2s;
     }
     .social-btn:hover {
-      
-      opacity: 1;
+      background: #000;
+      color: #fff;
+      opacity: 1;  
+   
     }
  
     /* Release overlay */
@@ -282,11 +286,11 @@
  
     .text-panel .section-label {
       text-transform: lowercase;
-      font-style: italic;
+      font-style: normal;
       margin-top: 1rem;
       margin-bottom: 0.2rem;
       font-size: 0.75rem;
-      opacity: 0.6;
+      opacity: 1;
     }
  
     .text-panel a { font-weight: 700; }
@@ -448,7 +452,7 @@
     <button class="close-btn" onclick="closeOverlay('info')">×</button>
     <h2>747 info</h2>
     <div class="sep-line">------------</div>
-    <u>contact</u><br>
+    <u>contact</u><br><br>
     booking: emily[at]aquaregiarecords[dot]com<br>
     general: rchan747[at]gmail[dot]com<br>
     <br>
