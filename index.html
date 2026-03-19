@@ -475,7 +475,29 @@
 
 <script>
 // ─── IMAGE HASHES → Cargo CDN URLs ───
-const cargoImg = hash => `https://freight.cargo.site/w/600/i/${hash}/img.jpg`;
+// Map release keys to local image paths
+const localImgs = {
+  'aqr026':      'images/aqr026.jpg',
+  'aqr026mixed': 'images/aqr026mixed.jpg',
+  'aqr027':      'images/aqr027.png',
+  'aqr025':      'images/aqr025.png',
+  'aqr024':      'images/aqr024.jpg',
+  'aqr022':      'images/aqr022.jpg',
+  'kasst-remix': 'images/kasst-remix.jpg',
+  'raw-comp':    'images/raw-comp.jpg',
+  'front-left-va':'images/front-left-va.jpg',
+  'aqr019':      'images/aqr019.jpg',
+  'aqr017':      'images/aqr017.jpg',
+  'aqr015':      'images/aqr015.jpg',
+  'aqr013':      'images/aqr013.jpg',
+  'aqr010':      'images/aqr010.jpg',
+  'aqr006':      'images/aqr006.jpg',
+  'aqr005':      'images/aqr005.jpg',
+  'aqr004':      'images/aqr004.jpg',
+  'aqr003':      'images/aqr003.jpg',
+  'aqr002':      'images/aqr002.jpg',
+  'aqr001':      'images/aqr001.jpg',
+};
 
 // ─── GALLERY ITEMS ───
 // [hash, href-key, freeform-x%, freeform-y%, scale-vw, z]
@@ -516,7 +538,7 @@ function buildGallery() {
     div.style.zIndex = item.z;
 
     const img = document.createElement('img');
-    img.src = cargoImg(item.hash);
+    img.src = localImgs[item.key] || 'images/' + item.key + '.jpg';
     img.alt = item.key;
     img.loading = 'lazy';
 
