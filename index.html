@@ -1,11 +1,687 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>747</title>
+  <meta name="description" content="747 — Canadian DJ and producer. Acid techno, trance, jungle.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1a1a1a;
+      --fg: rgba(255,255,255,0.85);
+      --fg-dim: rgba(255,255,255,0.45);
+      --accent: #ff3399;
+      --panel-bg: rgba(198,198,198,0.92);
+      --panel-fg: rgba(0,0,0,0.85);
+      --nav-height: 56px;
+      --mono: 'Space Mono', monospace;
+      --serif: 'EB Garamond', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.4;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { opacity: 0.7; }
+
+    /* ─── NAV ─── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    #nav-links {
+      pointer-events: auto;
+      display: flex;
+      gap: 18px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #nav-links a {
+      color: var(--fg);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    #nav-links .sep { opacity: 0.4; }
+
+    #nav-logo {
+      pointer-events: auto;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+      background: white;
+      color: rgba(0,0,0,0.85);
+      padding: 2px 8px;
+      text-decoration: none;
+      filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.5));
+    }
+
+    /* ─── PAGES ─── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ─── GALLERY PAGE ─── */
+    #page-gallery {
+      position: relative;
+      width: 100vw;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Grain texture background */
+    #page-gallery::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("https://freight.cargo.site/w/800/i/C2183332651965942624498673706489/grain-lower-qual.jpg");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.6;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #freeform-gallery {
+      position: relative;
+      width: 100%;
+      height: 130vh;
+      z-index: 1;
+    }
+
+    .gallery-item {
+      position: absolute;
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.15s ease;
+      filter: drop-shadow(6px 6px 6px rgba(0,0,0,0.6));
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.04);
+      filter: drop-shadow(8px 8px 12px rgba(0,0,0,0.8));
+      z-index: 100 !important;
+    }
+
+    .gallery-item img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* ─── OVERLAY PANELS ─── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+    }
+
+    .overlay.open { display: flex; }
+
+    .overlay-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.01);
+      cursor: pointer;
+    }
+
+    .overlay-panel {
+      position: relative;
+      z-index: 1;
+      background: var(--panel-bg);
+      color: var(--panel-fg);
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      padding: 2rem;
+      max-width: 480px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      margin: auto;
+      box-shadow: 6px 6px 3px rgba(0,0,0,0.49);
+      animation: slideIn 0.25s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-20px); opacity: 0; }
+      to   { transform: translateX(0); opacity: 1; }
+    }
+
+    .overlay-panel h2 {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      text-decoration: underline;
+      letter-spacing: 0;
+    }
+
+    .overlay-panel a {
+      color: var(--panel-fg);
+      text-decoration: underline;
+    }
+
+    .overlay-panel a:hover { opacity: 0.6; }
+
+    /* Socials overlay centered */
+    #overlay-socials .overlay-panel {
+      text-align: center;
+      max-width: 320px;
+    }
+
+    .social-btn {
+      display: inline-block;
+      background: #fff;
+      color: #000;
+      border: 0.2rem solid rgba(0,0,0,0.85);
+      border-radius: 99rem;
+      padding: 0.6rem 1.8rem;
+      margin: 0.4rem;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-decoration: none;
+      filter: drop-shadow(2px 2px 6px rgba(255,4,86,0));
+      transition: filter 0.2s;
+    }
+    .social-btn:hover {
+      filter: drop-shadow(2px 2px 8px rgba(255,4,86,0.6));
+      opacity: 1;
+    }
+
+    /* Release overlay */
+    #overlay-release .overlay-panel {
+      max-width: 560px;
+    }
+
+    .release-header {
+      font-weight: 700;
+      text-decoration: underline;
+      margin-bottom: 1rem;
+    }
+
+    .release-meta {
+      margin-top: 1rem;
+      font-size: 11px;
+      opacity: 0.75;
+    }
+
+    .release-body {
+      margin-top: 0.8rem;
+      font-size: 11.5px;
+      line-height: 1.65;
+    }
+
+    .icon-btn {
+      display: inline-block;
+      font-size: 16px;
+      margin-left: 0.4rem;
+      text-decoration: none;
+    }
+
+    /* Close button */
+    .close-btn {
+      position: absolute;
+      top: 12px; right: 16px;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0.5;
+      background: none;
+      border: none;
+      color: inherit;
+      font-family: var(--mono);
+      line-height: 1;
+    }
+    .close-btn:hover { opacity: 1; }
+
+    /* Mixes / catalogue text pages */
+    .text-panel {
+      max-width: 560px;
+    }
+
+    .text-panel .sep-line {
+      font-size: 11px;
+      opacity: 0.5;
+      margin: 0.8rem 0;
+    }
+
+    .text-panel .section-label {
+      text-transform: lowercase;
+      font-style: italic;
+      margin-top: 1rem;
+      margin-bottom: 0.2rem;
+      font-size: 11px;
+      opacity: 0.6;
+    }
+
+    .text-panel a {
+      font-weight: 700;
+    }
+
+    .ext-link {
+      font-size: 11px;
+      opacity: 0.7;
+      vertical-align: super;
+    }
+
+    /* Info */
+    #overlay-info .overlay-panel {
+      background: rgba(50,50,50,0.92);
+      color: rgba(255,255,255,0.85);
+      max-width: 560px;
+    }
+
+    #overlay-info .overlay-panel a { color: rgba(255,255,255,0.85); }
+    #overlay-info .overlay-panel h2 { color: rgba(255,255,255,0.85); }
+
+    /* Scrollbar */
+    .overlay-panel::-webkit-scrollbar { width: 4px; }
+    .overlay-panel::-webkit-scrollbar-track { background: transparent; }
+    .overlay-panel::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      #nav-links { font-size: 10px; gap: 10px; }
+      #nav-logo { font-size: 20px; }
+      .gallery-item { filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.7)); }
+    }
+  </style>
 </head>
 <body>
-    <h1>Hello world</h1>
+
+<!-- NAV -->
+<nav id="nav">
+  <div id="nav-links">
+    <a href="#" onclick="showOverlay('catalogue'); return false;">CATALOGUE</a>
+    <span class="sep">---</span>
+    <a href="#" onclick="showOverlay('mixes'); return false;">MIXES</a>
+    <span class="sep">---</span>
+    <a href="#" onclick="showOverlay('info'); return false;">INFO</a>
+    <span class="sep">---</span>
+    <a href="#" onclick="showOverlay('socials'); return false;">SOCIALS</a>
+  </div>
+  <a id="nav-logo" href="#" onclick="closeAll(); return false;">747</a>
+</nav>
+
+<!-- ══════════════════ GALLERY PAGE ══════════════════ -->
+<div id="page-gallery" class="page active">
+  <div id="freeform-gallery">
+    <!-- Items placed via JS below -->
+  </div>
+</div>
+
+<!-- ══════════════════ OVERLAYS ══════════════════ -->
+
+<!-- CATALOGUE -->
+<div class="overlay" id="overlay-catalogue">
+  <div class="overlay-backdrop" onclick="closeOverlay('catalogue')"></div>
+  <div class="overlay-panel text-panel">
+    <button class="close-btn" onclick="closeOverlay('catalogue')">×</button>
+    <h2>747 catalogue</h2>
+    <div class="sep-line">------------</div>
+
+    <div class="section-label">albums</div>
+    <div>-</div>
+    <a href="#" onclick="showRelease('aqr026mixed'); return false;">AQR026MIXED</a> - PACIFIC SPIRIT (CONTINUOUS MIX)<br>
+    <a href="#" onclick="showRelease('aqr026'); return false;">AQR026</a> - PACIFIC SPIRIT<br>
+    <a href="#" onclick="showRelease('aqr013'); return false;">AQR013</a> - THE GATE OF LIFE<br>
+    <a href="#" onclick="showRelease('aqr010'); return false;">AQR010</a> - PALEO<br>
+
+    <div class="section-label" style="margin-top:1rem;">eps</div>
+    <div>-</div>
+    <a href="#" onclick="showRelease('aqr025'); return false;">AQR025</a> - DEEP SPACE OPERA EP<br>
+    <a href="#" onclick="showRelease('aqr024'); return false;">AQR024</a> - VEILTAIL/STAIRWAY<br>
+    <a href="#" onclick="showRelease('aqr017'); return false;">AQR017</a> - WHILE MY 303 GENTLY WEEPS EP<br>
+    <a href="#" onclick="showRelease('aqr010'); return false;">AQR009</a> - PALEO PT. III EP<br>
+    <a href="#" onclick="showRelease('aqr010'); return false;">AQR008</a> - PALEO PT. II EP<br>
+    <a href="#" onclick="showRelease('aqr010'); return false;">AQR007</a> - PALEO PT. I EP<br>
+    <a href="#" onclick="showRelease('aqr006'); return false;">AQR006</a> - AURORA CENTRALIS EP<br>
+    <a href="#" onclick="showRelease('aqr005'); return false;">AQR005</a> - AMMONITE EP<br>
+    <a href="#" onclick="showRelease('aqr003'); return false;">AQR003</a> - SPICE GARDEN EP<br>
+    <a href="#" onclick="showRelease('aqr002'); return false;">AQR002</a> - ALIEN ALIEN EP<br>
+    <a href="#" onclick="showRelease('aqr001'); return false;">AQR001</a> - MY BRAIN IS MELTING EP<br>
+
+    <div class="section-label" style="margin-top:1rem;">remix eps</div>
+    <div>-</div>
+    <a href="#" onclick="showRelease('aqr015'); return false;">AQR015</a> - AURORA CENTRALIS (THE REMIXES)<br>
+    <a href="#" onclick="showRelease('aqr004'); return false;">AQR004</a> - MY BRAIN IS MELTING (THE REMIXES)<br>
+
+    <div class="section-label" style="margin-top:1rem;">va</div>
+    <div>-</div>
+    <a href="#" onclick="showRelease('aqr027'); return false;">AQR027</a> - 10 - 747 - DECADES<br>
+    <a href="#" onclick="showRelease('aqr019'); return false;">AQR019</a> - ACID ANALECTS VOL. 1 - DOMAIN EXPANSION<br>
+    <a href="#" onclick="showRelease('raw-comp'); return false;">RAW SUMMER HITS 3</a> - KAVINSKY - NIGHTCALL (747 EDIT)<br>
+    <a href="#" onclick="showRelease('front-left-va'); return false;">FRONT LEFT VA 03</a> - 747 - ROLLING THUNDER<br>
+
+    <div class="section-label" style="margin-top:1rem;">remixes</div>
+    <div>-</div>
+    <a href="#" onclick="showRelease('aqr022'); return false;">AQR022</a> - BLAZEJ MALINOWSKI - ACID THEORY (747 REMIX)<br>
+    <a href="#" onclick="showRelease('kasst-remix'); return false;">M13</a> - KAS:ST - THE LIGHT AT THE END OF THE TUNNEL (747 REMIX)<br>
+  </div>
+</div>
+
+<!-- MIXES -->
+<div class="overlay" id="overlay-mixes">
+  <div class="overlay-backdrop" onclick="closeOverlay('mixes')"></div>
+  <div class="overlay-panel text-panel">
+    <button class="close-btn" onclick="closeOverlay('mixes')">×</button>
+    <h2>747 mixes</h2>
+    <div class="sep-line">------------</div>
+
+    Monument - MNMT 374 <a class="ext-link" href="https://soundcloud.com/monument-podcast/mnmt-374-747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    Slam Radio - recorded @ About Blank <a class="ext-link" href="https://soundcloud.com/slam_djs/slamradio-310-747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    747 HATE Podcast 162 <a class="ext-link" href="https://www.youtube.com/watch?v=ShGbSriu-VI&t=2927s" target="_blank">↗</a><br>
+    Dublab Radio 08.09.25 <a class="ext-link" href="https://www.dublab.com/archive/747-guest-session-08-09-25" target="_blank">↗</a><br>
+    CS Radio 08.03.25 <a class="ext-link" href="https://youtu.be/0BABrSHqltU?si=R4Mu97KUf_BeGufZ" target="_blank">↗</a><br>
+    Artaphine Series 066 <a class="ext-link" href="https://soundcloud.com/artaphine/747-artaphine-series-066?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    Elements Podcast 009 <a class="ext-link" href="https://soundcloud.com/about-blank-berlin/elements-podcast-009?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    Techno Cave 020 <a class="ext-link" href="https://soundcloud.com/techno-cave/747-techno-cave-podcast-020?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    Temper Talents 02 <a class="ext-link" href="https://soundcloud.com/temper-talents/temper-talents-podcast-747-002?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    Quarantine Stream<br>
+    &nbsp;&nbsp;- 6AM/Deviation Agency <a class="ext-link" href="https://www.youtube.com/watch?v=oaPw9zSHys8&t=1065s" target="_blank">↗</a><br>
+    Newtown Welcomes: 747 [EP.14] <a class="ext-link" href="https://www.youtube.com/watch?v=GX6OeGydXcg&t=5941s" target="_blank">↗</a><br>
+    The Forgotten CCXLI <a class="ext-link" href="https://soundcloud.com/theforgottenrec/the-forgotten-261?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    Erratic Podcast 223 <a class="ext-link" href="https://soundcloud.com/erraticnyc/erratic-podcast-223-747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    KNTXT: 747 <a class="ext-link" href="https://soundcloud.com/kntxtmusic/charlotte-de-witte-presents-kntxt-74717112018?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    Tech Clubbers #197 <a class="ext-link" href="https://soundcloud.com/techclubbers/747-tech-clubbers-podcast-197?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    You Play I Write 53 <a class="ext-link" href="https://soundcloud.com/vanitydust/ypiw747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    Equinox Invites 006 <a class="ext-link" href="https://soundcloud.com/equinox-melbourne/equinox-invites-006-747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    <br>
+    Aquaregia Studio Mix No.24<br>
+    &nbsp;&nbsp;- all vinyl, all 90s <a class="ext-link" href="https://www.youtube.com/watch?v=fs3ZShI5xt0&t=5s" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.21 <a class="ext-link" href="https://www.youtube.com/watch?v=o0UChlJxEng&t=5444s" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.20 <a class="ext-link" href="https://www.youtube.com/watch?v=Bi6_XdA4Joo" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.16<br>
+    &nbsp;&nbsp;- recorded @ rex club 4/26/19 <a class="ext-link" href="https://www.youtube.com/watch?v=JEAH7IFSqNM" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.13 <a class="ext-link" href="https://www.youtube.com/watch?v=dowXG2Bqftg" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.9<br>
+    &nbsp;&nbsp;- all vinyl <a class="ext-link" href="https://www.youtube.com/watch?v=2j60FQG1EGk" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.6 <a class="ext-link" href="https://www.youtube.com/watch?v=ms7hA4zdMN0" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.4 <a class="ext-link" href="https://www.youtube.com/watch?v=qCBVgyhmoZE" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.3<br>
+    &nbsp;&nbsp;- 100% vinyl <a class="ext-link" href="https://www.youtube.com/watch?v=EbEOqX6jOgM" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.2 <a class="ext-link" href="https://www.youtube.com/watch?v=nxqNHHzR_h8" target="_blank">↗</a><br>
+    Aquaregia Studio Mix No.1<br>
+    &nbsp;&nbsp;- 100% vinyl, b2b Emily Nicoll <a class="ext-link" href="https://www.youtube.com/watch?v=6CCmyEgJalo" target="_blank">↗</a><br>
+    <br>
+    <span style="font-size:10px; opacity:0.5;">↗ = video/stream link</span>
+  </div>
+</div>
+
+<!-- INFO -->
+<div class="overlay" id="overlay-info">
+  <div class="overlay-backdrop" onclick="closeOverlay('info')"></div>
+  <div class="overlay-panel text-panel">
+    <button class="close-btn" onclick="closeOverlay('info')">×</button>
+    <h2>747 info</h2>
+    <div class="sep-line">------------</div>
+    <u>contact</u><br>
+    booking: emily[at]aquaregiarecords[dot]com<br>
+    general: rchan747[at]gmail[dot]com<br>
+    <br>
+    <u>bio</u><br>
+    <br>
+    747 is a Canadian DJ and producer known for his emotive acid-tinged works. His music is a constant evolution with a mixture of lush pads, dreamy soundscapes, and the sound of the 303. Inspired by the sounds of Berlin, Detroit, and the acid legends, his sound is high-fidelity yet old-school, uplifting yet melancholic, a journey with no destination.<br><br>
+    His breakthrough came with the widely acclaimed Aurora Centralis EP, which quickly established 747 as a leading voice in the acid techno scene. The title track became a global favorite, captivating floors around the world with its emotional depth. He followed up with the eight-track Paleo series on Aquaregia, an ambitious record that further defined his sound and built a dedicated following around his melancholic take on acid. In 2019, his first full-length album The Gate of Life marked a shift toward 90s-inspired trance, introducing a whimsical tone to the often more serious atmosphere of his earlier work.<br><br>
+    2025 saw the release of his second full-length studio album, Pacific Spirit, an ode to his hometown of Vancouver in the Pacific Northwest. The album represented a distinct departure from his techno sound of the past decade, while continuing the sonic narrative he's developed over the years, fusing jungle breaks with the sounds of 90s trance and the 303.
+  </div>
+</div>
+
+<!-- SOCIALS -->
+<div class="overlay" id="overlay-socials">
+  <div class="overlay-backdrop" onclick="closeOverlay('socials')"></div>
+  <div class="overlay-panel" style="text-align:center; max-width:320px;">
+    <button class="close-btn" onclick="closeOverlay('socials')">×</button>
+    <h2 style="margin-bottom:1.5rem;">747</h2>
+    <a class="social-btn" href="https://www.discogs.com/artist/159940-747" target="_blank">discogs</a><br>
+    <a class="social-btn" href="https://open.spotify.com/artist/4XdrSXGCK9KeWzLbz5Qqhl" target="_blank">spotify</a><br>
+    <a class="social-btn" href="https://www.soundcloud.com/747" target="_blank">soundcloud</a><br>
+    <a class="social-btn" href="https://ra.co/dj/747" target="_blank">RA</a><br>
+    <a class="social-btn" href="https://www.instagram.com/747_._" target="_blank">instagram</a><br>
+    <a class="social-btn" href="https://www.facebook.com/team747" target="_blank">facebook</a>
+  </div>
+</div>
+
+<!-- RELEASE DETAIL OVERLAY -->
+<div class="overlay" id="overlay-release">
+  <div class="overlay-backdrop" onclick="closeOverlay('release')"></div>
+  <div class="overlay-panel" id="release-panel">
+    <button class="close-btn" onclick="closeOverlay('release')">×</button>
+    <div id="release-content"></div>
+  </div>
+</div>
+
+<script>
+// ─── IMAGE HASHES → Cargo CDN URLs ───
+const cargoImg = hash => `https://freight.cargo.site/w/600/i/${hash}/img.jpg`;
+
+// ─── GALLERY ITEMS ───
+// [hash, href-key, freeform-x%, freeform-y%, scale-vw, z]
+const galleryItems = [
+  { hash: 'N2846392545981799181409159144953', key: 'aqr026',     x: 9.5,  y: 0,    scale: 22, z: 12 },
+  { hash: 'Y2185437984751586455137954751993', key: 'aqr013',     x: 63.3, y: 6,    scale: 22, z: 2  },
+  { hash: 'P2846394010339683984694495077881', key: 'aqr026mixed',x: 30,   y: 14,   scale: 20, z: 13 },
+  { hash: 'T2185446034504871852364669838841', key: 'aqr006',     x: 80.7, y: 23,   scale: 19, z: 1  },
+  { hash: 'L2846393280106873082828184806905', key: 'aqr027',     x: 17,   y: 29,   scale: 20, z: 14 },
+  { hash: 'K2185437984843820175506502510073', key: 'aqr024',     x: 56.2, y: 37,   scale: 16, z: 5  },
+  { hash: 'J2181824782583747803799642367481', key: 'aqr025',     x: 4.6,  y: 44,   scale: 18, z: 15 },
+  { hash: 'Y2185439203177479267727548540409', key: 'aqr017',     x: 45.2, y: 50.7, scale: 14, z: 3  },
+  { hash: 'O2185437984770033199211664303609', key: 'aqr015',     x: 55.5, y: 61.3, scale: 13, z: 4  },
+  { hash: 'K2185444503757155127798657639929', key: 'aqr010',     x: 76.4, y: 64,   scale: 19, z: 6  },
+  { hash: 'C2185437984806926687359083406841', key: 'aqr022',     x: 1.5,  y: 73.3, scale: 15, z: 17 },
+  { hash: 'C2185437984640905990695697442297', key: 'aqr003',     x: 30.7, y: 76.3, scale: 19, z: 16 },
+  { hash: 'J2185437984677799478843116545529', key: 'aqr005',     x: 64.6, y: 78.6, scale: 18, z: 7  },
+  { hash: 'T2846391755409688414438905538041', key: 'kasst-remix',x: 13.5, y: 86,   scale: 9,  z: 18 },
+  { hash: 'J2185437984788479943285373855225', key: 'aqr019',     x: 20.4, y: 93.9, scale: 12, z: 8  },
+  { hash: 'I2185437984622459246621987890681', key: 'aqr002',     x: 79.5, y: 101,  scale: 11, z: 9  },
+  { hash: 'K2846397506754002459676617926137', key: 'front-left-va', x: 42.6, y: 103, scale: 10, z: 20 },
+  { hash: 'P2185437984604012502548278339065', key: 'aqr001',     x: 62.1, y: 104,  scale: 12, z: 11 },
+  { hash: 'A2185451120345999950382888576505', key: 'raw-comp',   x: 36.3, y: 110.8,scale: 8,  z: 19 },
+  { hash: 'B2185437984659352734769406993913', key: 'aqr004',     x: 73.3, y: 110.9,scale: 8,  z: 10 },
+];
+
+function buildGallery() {
+  const container = document.getElementById('freeform-gallery');
+  // Make container tall enough
+  container.style.height = '140vh';
+
+  galleryItems.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'gallery-item';
+    div.style.left = item.x + 'vw';
+    div.style.top = item.y + 'vh';
+    div.style.width = item.scale + 'vw';
+    div.style.zIndex = item.z;
+
+    const img = document.createElement('img');
+    img.src = cargoImg(item.hash);
+    img.alt = item.key;
+    img.loading = 'lazy';
+
+    div.appendChild(img);
+    div.addEventListener('click', () => showRelease(item.key));
+    container.appendChild(div);
+  });
+}
+
+// ─── RELEASE DATA ───
+const releases = {
+  'aqr027': {
+    title: 'Various Artists - 10',
+    buy: 'https://aquaregiarec.bandcamp.com/album/10',
+    body: 'B3: 747 - Decades',
+    meta: 'Catalogue: AQR027 | Format: Digital & Vinyl | Release date: January 23, 2026'
+  },
+  'aqr026mixed': {
+    title: '747 - Pacific Spirit (Continuous Mix)',
+    listen: 'https://open.spotify.com/album/0RilOmZ7wJqMx2Q1zkAKNm',
+    body: `Tracklist:<br><br>1. Expo (Continuous Mix)<br>2. Second Narrows (Continuous Mix)<br>3. Sea to Sky (Continuous Mix)<br>4. Lost Lagoon (Continuous Mix)<br>5. Pacific Spirit (Continuous Mix)<br>6. Camosun Bog (Continuous Mix)<br>7. Pony Trail (Continuous Mix)<br>8. Coquihalla (Continuous Mix)<br>9. Cascadia (Continuous Mix)`,
+    meta: 'Catalogue: AQR026MIXED | Format: Digital | Release date: September 12, 2025'
+  },
+  'aqr026': {
+    title: '747 - Pacific Spirit',
+    buy: 'https://aquaregiarec.bandcamp.com/album/pacific-spirit',
+    body: `Tracklist:<br><br>A1: Pacific Spirit<br>A2: Lost Lagoon<br>B1: Sea to Sky<br>B2: Second Narrows<br>C1: Expo<br>C2: Camosun Bog<br>D1: Pony Trail<br>D2: Coquihalla<br>D3: Cascadia<br><br>A transmission from the mist-draped thresholds of the Pacific Northwest, Pacific Spirit finds 747 re-emerging with a new pulse; one that splinters his trademark acid into branches of breakbeat and trance with a jungle trunk.<br><br>Each of the 300 vinyl copies arrives housed in its own one-of-a-kind jacket featuring algorithmically conjured artworks coded by 747 and Emily Nicoll.<br><br><a href="https://enicoll.com/pacific-spirit" target="_blank">Artwork Information →</a>`,
+    meta: 'Catalogue: AQR026 | Format: Digital & Vinyl | Release date: July 25, 2025'
+  },
+  'aqr025': {
+    title: '747 - Deep Space Opera (Vinyl Only)',
+    buy: 'https://aquaregiarec.bandcamp.com/album/deep-space-opera-ep-vinyl-only',
+    body: `Tracklist:<br><br>A1: Orbital Escape<br>A2: Suffocating in Stardust<br>B1: Iron Tears<br>B2: Deep Space Opera<br><br>747 re-enters Aquaregia's orbit with Deep Space Opera, setting course for a four-stage interstellar mission. Available exclusively on wax.`,
+    meta: 'Catalogue: AQR025 | Format: Vinyl | Release date: April 4, 2025'
+  },
+  'aqr024': {
+    title: '747 - Veiltail / Stairway',
+    buy: 'https://aquaregiarec.bandcamp.com/album/veiltail-stairway',
+    body: `Tracklist:<br><br>A: Veiltail<br>B: Stairway<br><br>Three years have passed since 747 last set-free works from his studio. He makes the wait well worthwhile as he emerges with two exquisitely dreamy and emotionally charged compositions in this cinched two-track record.`,
+    meta: 'Catalogue: AQR024 | Format: Digital & Vinyl | Release date: March 22, 2024'
+  },
+  'aqr022': {
+    title: 'Blazej Malinowski - Moods EP',
+    buy: 'https://aquaregiarec.bandcamp.com/album/moods-ep',
+    body: 'B2: Acid Theory (747 Remix)',
+    meta: 'Catalogue: AQR022 | Format: Digital & Vinyl | Release date: January 13, 2023'
+  },
+  'kasst-remix': {
+    title: 'Kas:st - The Light At The End Of The Tunnel EP',
+    buy: 'https://materiamusicofficial.bandcamp.com/album/kas-st-the-light-at-the-end-of-the-tunnel-ep',
+    body: '4: Kas:st - The Light At The End Of The Tunnel (747 Remix)',
+    meta: 'Catalogue: Materia 020 | Format: Digital | Release date: December 10, 2018'
+  },
+  'raw-comp': {
+    title: 'Various Artists - RAW Summer Hits 3 • Special Edits',
+    buy: 'https://rawppl.bandcamp.com/album/raw-summer-hits-3-special-edits',
+    body: '7: Kavinsky - Nightcall (747 Edit)',
+    meta: 'Catalogue: RAW Summer Hits 3 | Format: Digital | Release date: June 30, 2022'
+  },
+  'front-left-va': {
+    title: 'Various Artists - Front Left VA 03',
+    buy: 'https://frontleftrecords.bandcamp.com/album/front-left-va-03',
+    body: '1: 747 - Rolling Thunder',
+    meta: 'Catalogue: FLRDGTL03 | Format: Digital | Release date: January 18, 2022'
+  },
+  'aqr019': {
+    title: 'Various Artists - Acid Analects Vol. 1',
+    buy: 'https://aquaregiarec.bandcamp.com/album/acid-analects-vol-1',
+    body: 'B1: 747 - Domain Expansion',
+    meta: 'Catalogue: AQR019 | Format: Digital & Vinyl | Release date: October 22, 2021'
+  },
+  'aqr017': {
+    title: '747 - While My 303 Gently Weeps',
+    buy: 'https://aquaregiarec.bandcamp.com/album/while-my-303-gently-weeps-ep',
+    body: `Tracklist:<br><br>A1: you, you<br>A2: Does Anybody Remember Laughter?<br>B1: While My 303 Gently Weeps<br>B2: You Missed the Starting Gun<br><br>In his first EP since The Gate of Life, 747 returns from a temporal leap, bringing a blend of sounds and expressions to forge a timeless trip which hinges on the sounds of the 303.`,
+    meta: 'Catalogue: AQR017 | Format: Digital & Vinyl | Release date: February 12, 2021'
+  },
+  'aqr015': {
+    title: '747 - Aurora Centralis - The Remixes',
+    buy: 'https://aquaregiarec.bandcamp.com/album/aurora-centralis-the-remixes',
+    body: `Tracklist:<br><br>A1: Aurora Centralis (Schacke Remix)<br>A2: Aurora Centralis (Tin Man's Spaced Remix)<br>B1: Aurora Centralis (nthng's Saiyan Saga)<br>B2: Aurora Centralis (Primal Code Remix)<br>Digital Bonus 1: Aurora Centralis (nthng's Saiyan Dream)<br>Digital Bonus 2: Aurora Centralis (Tin Man's Detroit Remix)<br><br>Three years after the original's release, new life is given to 747's widely acclaimed neoclassic acid anthem, Aurora Centralis.`,
+    meta: 'Catalogue: AQR015 | Format: Digital & Vinyl | Release date: May 15, 2020'
+  },
+  'aqr013': {
+    title: '747 - The Gate of Life',
+    buy: 'https://aquaregiarec.bandcamp.com/album/the-gate-of-life',
+    body: `Tracklist:<br><br>1. Shira Ume<br>2. Theme from Midnight Express<br>3. Metal Upa<br>4. Mystery of Pain<br>5. It's Dangerous to Go Alone (Interlude)<br>6. Unit-00<br>7. The Gate of Life<br>8. Kamé<br>9. One Last Dance<br>10. Blood Moon Rises<br>11. Passenger of Time<br>12. Heavens Arena<br><br>In his debut studio album, 747 showcases a new maturity to his productions, implementing intricate synth work and his innate sense of musicality to present eleven original compositions and a masterful cover of Giorgio Moroder's 1978 theme.`,
+    meta: 'Catalogue: AQR013 | Format: Digital & Vinyl | Release date: November 4, 2019'
+  },
+  'aqr010': {
+    title: '747 - Paleo',
+    body: `<a href="https://aquaregiarec.bandcamp.com/album/paleo-pt-1" target="_blank">Paleo, Pt. 1 🛒</a><br><a href="https://aquaregiarec.bandcamp.com/album/paleo-pt-2" target="_blank">Paleo, Pt. 2 🛒</a><br><a href="https://aquaregiarec.bandcamp.com/album/paleo-pt-3" target="_blank">Paleo, Pt. 3 🛒</a><br><br>Tracklist:<br><br>A1: Cretaceous<br>A2: Cambrian<br>B1: Tethys<br>B2: Pangea<br>C1: Astero Ceras<br>C2: Suture Lines<br>D1: Holocene (Vinyl Only)<br>D2: Proxima (Vinyl Only)<br><br>The series explores the geological past of our planet through acid. The four-part series comprises three digital EPs and a concluding double EP vinyl release.`,
+    meta: 'Catalogue: AQR007–010 | Format: Digital & Vinyl | Release dates: 2017–2018'
+  },
+  'aqr006': {
+    title: '747 - Aurora Centralis EP',
+    buy: 'https://aquaregiarec.bandcamp.com/album/aurora-centralis-ep',
+    body: `Tracklist:<br><br>A1: Aurora Centralis<br>A2: Tenke<br>B1: Night Passage<br>B2: Tenke (747's Oxidized Edit) *Bonus 12" Vinyl Only*<br><br>The Aurora Centralis EP teleports us to a cosmic dream-state with a 303-fueled ambience.`,
+    meta: 'Catalogue: AQR006 | Format: Digital & Vinyl | Release date: June 30, 2017'
+  },
+  'aqr005': {
+    title: '747 - Ammonite EP',
+    buy: 'https://aquaregiarec.bandcamp.com/album/ammonite-ep',
+    body: `Tracklist:<br><br>A1: Ammon<br>A2: Depth Sounder<br>B1: Tourmaline<br>B2: Ammon (Beatless Version) *Bonus 12" Vinyl Only*<br><br>The most definitively Aquaregian release to materialize from the laboratory to date, Ammonite EP polishes off 2016 with a decisive trio of productions from 747.`,
+    meta: 'Catalogue: AQR005 | Format: Digital & Vinyl | Release date: December 2, 2016'
+  },
+  'aqr004': {
+    title: '747 - My Brain Is Melting EP - The Remixes',
+    buy: 'https://aquaregiarec.bandcamp.com/album/my-brain-is-melting-ep-the-remixes',
+    body: `Tracklist:<br><br>1: My Brain Is Melting (Jeremy Stott Remix)<br>2: Formula (Oliver Nickels Remix)<br>3: Formula (Hypocrite Remix)<br><br>747's My Brain is Melting EP receives three personal reinterpretations that bring new life to the originals.`,
+    meta: 'Catalogue: AQR004 | Format: Digital | Release date: August 1, 2016'
+  },
+  'aqr003': {
+    title: '747 - Spice Garden EP',
+    buy: 'https://aquaregiarec.bandcamp.com/album/spice-garden-ep',
+    body: `Tracklist:<br><br>1: Tataki Attack<br>2: Spice Garden<br><br>Back for his third instalment on the label, 747 brings an acidic two-tracker to kick off the summer.`,
+    meta: 'Catalogue: AQR003 | Format: Digital | Release date: May 16, 2016'
+  },
+  'aqr002': {
+    title: '747 - Alien Alien EP',
+    buy: 'https://aquaregiarec.bandcamp.com/album/alien-alien-ep',
+    body: `Tracklist:<br><br>1: Aegis<br>2: Alien Alien<br>3: Stereo7<br><br>747 returns to Aquaregia with his second release, an expertly crafted three track EP curated for the dance floor.`,
+    meta: 'Catalogue: AQR002 | Format: Digital | Release date: February 29, 2016'
+  },
+  'aqr001': {
+    title: '747 - My Brain Is Melting EP',
+    buy: 'https://aquaregiarec.bandcamp.com/album/my-brain-is-melting-ep',
+    body: `Tracklist:<br><br>1: My Brain Is Melting<br>2: Formula<br><br>We are excited to introduce 747, the master behind Aquaregia's debut release, My Brain Is Melting.`,
+    meta: 'Catalogue: AQR001 | Format: Digital | Release date: December 7, 2015'
+  },
+};
+
+function showRelease(key) {
+  const r = releases[key];
+  if (!r) return;
+  let html = `<div class="release-header">${r.title}`;
+  if (r.buy) html += ` <a href="${r.buy}" target="_blank" class="icon-btn" title="Buy">🛒</a>`;
+  if (r.listen) html += ` <a href="${r.listen}" target="_blank" class="icon-btn" title="Listen">🔊</a>`;
+  html += `</div>`;
+  html += `<div class="release-body">${r.body}</div>`;
+  if (r.meta) html += `<div class="release-meta">${r.meta}</div>`;
+
+  document.getElementById('release-content').innerHTML = html;
+  closeAll(false);
+  document.getElementById('overlay-release').classList.add('open');
+}
+
+function showOverlay(name) {
+  closeAll(false);
+  document.getElementById('overlay-' + name).classList.add('open');
+}
+
+function closeOverlay(name) {
+  document.getElementById('overlay-' + name).classList.remove('open');
+}
+
+function closeAll(full = true) {
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open'));
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeAll();
+});
+
+buildGallery();
+</script>
 </body>
 </html>
