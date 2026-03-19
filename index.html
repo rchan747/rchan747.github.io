@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
   <style>
     :root {
       --bg: #1a1a1a;
@@ -16,74 +17,77 @@
       --accent: #ff3399;
       --panel-bg: rgba(198,198,198,0.92);
       --panel-fg: rgba(0,0,0,0.85);
-      --nav-height: 56px;
-      --mono: 'Courier New', monospace;
+      --mono: 'Space Mono', monospace;
+      --nav-font: 'Courier New', monospace;
       --serif: 'EB Garamond', serif;
     }
-
+ 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      height: 100%;
+ 
+    html {
+      /* Fluid base: scales from ~12px at 320px viewport to ~16px at 1440px */
+      font-size: clamp(0.75rem, 0.5rem + 1vw, 1rem);
+    }
+ 
+    body {
+      min-height: 100%;
       background: var(--bg);
       color: var(--fg);
       font-family: var(--mono);
-      font-size: 13px;
       line-height: 1.4;
       overflow-x: hidden;
     }
-
+ 
     a { color: inherit; text-decoration: none; }
     a:hover { opacity: 0.7; }
-
+ 
     /* ─── NAV ─── */
     #nav {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 1000;
-      padding: 14px 24px;
+      padding: 0.9rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       pointer-events: none;
     }
-
+ 
     #nav-links {
       pointer-events: auto;
       display: flex;
-      gap: 18px;
-      font-size: 28px;
-      font-family: 'Datatype', monospace;
+      gap: 1.1rem;
+      font-size: 1.5rem;
+      font-family: var(--nav-font);
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-
+ 
     #nav-links a {
       color: var(--fg);
       text-decoration: none;
       white-space: nowrap;
     }
-
+ 
     #nav-links .sep { opacity: 0.4; }
-
+ 
     #nav-logo {
       pointer-events: auto;
-      font-family: 'Datatype', monospace;
+      font-family: var(--nav-font);
       font-weight: 700;
-      font-size: 50px;
+      font-size: 3.5rem;
       letter-spacing: -0.02em;
-      color: var(--fg);
       background: white;
       color: rgba(0,0,0,0.85);
-      padding: 2px 8px;
+      padding: 0.1rem 0.5rem;
       text-decoration: none;
-      filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.5));
+      filter: drop-shadow(0.25rem 0.25rem 0 rgba(0,0,0,0.5));
     }
-
+ 
     /* ─── PAGES ─── */
     .page { display: none; }
     .page.active { display: block; }
-
+ 
     /* ─── GALLERY PAGE ─── */
     #page-gallery {
       position: relative;
@@ -92,7 +96,7 @@
       padding-top: 5%;
       overflow: hidden;
     }
-
+ 
     /* Grain texture background */
     #page-gallery::before {
       content: '';
@@ -105,33 +109,33 @@
       z-index: 0;
       pointer-events: none;
     }
-
+ 
     #freeform-gallery {
       position: relative;
       width: 100%;
       height: 130vh;
       z-index: 1;
     }
-
+ 
     .gallery-item {
       position: absolute;
       cursor: pointer;
       transition: transform 0.15s ease, filter 0.15s ease;
-      filter: drop-shadow(6px 6px 6px rgba(0,0,0,0.6));
+      filter: drop-shadow(0.4rem 0.4rem 0.4rem rgba(0,0,0,0.6));
     }
-
+ 
     .gallery-item:hover {
       transform: scale(1.04);
-      filter: drop-shadow(8px 8px 12px rgba(0,0,0,0.8));
+      filter: drop-shadow(0.5rem 0.5rem 0.75rem rgba(0,0,0,0.8));
       z-index: 100 !important;
     }
-
+ 
     .gallery-item img {
       display: block;
       width: 100%;
       height: auto;
     }
-
+ 
     /* ─── OVERLAY PANELS ─── */
     .overlay {
       display: none;
@@ -139,115 +143,122 @@
       inset: 0;
       z-index: 500;
     }
-
+ 
     .overlay.open { display: flex; }
-
+ 
     .overlay-backdrop {
       position: absolute;
       inset: 0;
       background: rgba(0,0,0,0.01);
       cursor: pointer;
     }
-
+ 
     .overlay-panel {
       position: relative;
       z-index: 1;
       background: var(--panel-bg);
       color: var(--panel-fg);
       font-family: var(--mono);
-      font-size: 12px;
+      font-size: 0.85rem;
       line-height: 1.6;
       padding: 2rem;
-      max-width: 480px;
+      max-width: 30rem;
       width: 90%;
       max-height: 85vh;
       overflow-y: auto;
       margin: auto;
-      box-shadow: 6px 6px 3px rgba(0,0,0,0.49);
+      box-shadow: 0.4rem 0.4rem 0.2rem rgba(0,0,0,0.49);
       animation: slideIn 0.25s ease;
     }
-
+ 
     @keyframes slideIn {
-      from { transform: translateX(-20px); opacity: 0; }
+      from { transform: translateX(-1.25rem); opacity: 0; }
       to   { transform: translateX(0); opacity: 1; }
     }
-
+ 
     .overlay-panel h2 {
       font-family: var(--mono);
-      font-size: 13px;
+      font-size: 0.9rem;
       font-weight: 700;
       margin-bottom: 1.2rem;
-      text-decoration: underline;
+      text-decoration: none;
       letter-spacing: 0;
     }
-
+ 
     .overlay-panel a {
       color: var(--panel-fg);
-      text-decoration: underline;
+      text-decoration: none;
     }
-
+ 
     .overlay-panel a:hover { opacity: 0.6; }
-
+ 
     /* Socials overlay centered */
     #overlay-socials .overlay-panel {
       text-align: center;
-      max-width: 320px;
+      max-width: 20rem;
     }
-
+ 
     .social-btn {
       display: inline-block;
       background: #fff;
       color: #000;
-      border: 0.2rem solid rgba(0,0,0,0.85);
+      border: 0.15rem solid rgba(0,0,0,0.85);
       border-radius: 99rem;
-      padding: 0.6rem 1.8rem;
-      margin: 0.4rem;
+      padding: 0.5rem 1.6rem;
+      margin: 0.3rem;
       font-family: var(--mono);
-      font-size: 12px;
+      font-size: 0.85rem;
       text-decoration: none;
-      filter: drop-shadow(2px 2px 6px rgba(255,4,86,0));
       transition: filter 0.2s;
     }
     .social-btn:hover {
-      filter: drop-shadow(2px 2px 8px rgba(255,4,86,0.6));
+      
       opacity: 1;
     }
-
+ 
     /* Release overlay */
     #overlay-release .overlay-panel {
-      max-width: 560px;
+      max-width: 35rem;
     }
-
+ 
     .release-header {
       font-weight: 700;
+      font-size: 1rem;
       text-decoration: underline;
       margin-bottom: 1rem;
     }
-
+ 
     .release-meta {
       margin-top: 1rem;
-      font-size: 11px;
+      font-size: 0.75rem;
       opacity: 0.75;
     }
-
+ 
     .release-body {
       margin-top: 0.8rem;
-      font-size: 11.5px;
+      font-size: 1rem;
       line-height: 1.65;
     }
-
+ 
     .icon-btn {
       display: inline-block;
-      font-size: 16px;
-      margin-left: 0.4rem;
+      font-size: 0.8rem;
+      margin-left: 0rem;
       text-decoration: none;
     }
 
+    .icon-btn svg {
+      width: 1rem;
+      height: 1rem;
+      stroke-width: 1.5;
+      vertical-align: middle;
+    }
+ 
     /* Close button */
     .close-btn {
       position: absolute;
-      top: 12px; right: 16px;
-      font-size: 20px;
+      top: 0.75rem; right: 1rem;
+      font-size: 1.25rem;
       cursor: pointer;
       opacity: 0.5;
       background: none;
@@ -257,57 +268,53 @@
       line-height: 1;
     }
     .close-btn:hover { opacity: 1; }
-
+ 
     /* Mixes / catalogue text pages */
-    .text-panel {
-      max-width: 560px;
-    }
-
+    .text-panel { max-width: 35rem; }
+ 
     .text-panel .sep-line {
-      font-size: 11px;
+      font-size: 0.75rem;
       opacity: 0.5;
       margin: 0.8rem 0;
     }
-
+ 
     .text-panel .section-label {
       text-transform: lowercase;
       font-style: italic;
       margin-top: 1rem;
       margin-bottom: 0.2rem;
-      font-size: 11px;
+      font-size: 0.75rem;
       opacity: 0.6;
     }
-
-    .text-panel a {
-      font-weight: 700;
-    }
-
+ 
+    .text-panel a { font-weight: 700; }
+ 
     .ext-link {
-      font-size: 11px;
+      font-size: 0.75rem;
       opacity: 0.7;
       vertical-align: super;
     }
-
+ 
     /* Info */
     #overlay-info .overlay-panel {
       background: rgba(50,50,50,0.92);
       color: rgba(255,255,255,0.85);
-      max-width: 560px;
+      max-width: 35rem;
     }
-
+ 
     #overlay-info .overlay-panel a { color: rgba(255,255,255,0.85); }
     #overlay-info .overlay-panel h2 { color: rgba(255,255,255,0.85); }
-
+ 
     /* Scrollbar */
-    .overlay-panel::-webkit-scrollbar { width: 4px; }
+    .overlay-panel::-webkit-scrollbar { width: 0.25rem; }
     .overlay-panel::-webkit-scrollbar-track { background: transparent; }
     .overlay-panel::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }
-
+ 
     /* Mobile adjustments */
     @media (max-width: 600px) {
-      #nav-links { font-size: 10px; gap: 10px; }
-      #nav-logo { font-size: 20px; }
-      .gallery-item { filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.7)); }
+      #nav-links { font-size: 0.7rem; gap: 0.6rem; }
+      #nav-logo { font-size: 2rem; }
+      .gallery-item { filter: drop-shadow(0.2rem 0.2rem 0.25rem rgba(0,0,0,0.7)); }
     }
   </style>
 </head>
@@ -630,11 +637,11 @@ const releases = {
     body: `Tracklist:<br><br>1. Shira Ume<br>2. Theme from Midnight Express<br>3. Metal Upa<br>4. Mystery of Pain<br>5. It's Dangerous to Go Alone (Interlude)<br>6. Unit-00<br>7. The Gate of Life<br>8. Kamé<br>9. One Last Dance<br>10. Blood Moon Rises<br>11. Passenger of Time<br>12. Heavens Arena<br><br>In his debut studio album, 747 showcases a new maturity to his productions, implementing intricate synth work and his innate sense of musicality to present eleven original compositions and a masterful cover of Giorgio Moroder's 1978 theme.`,
     meta: 'Catalogue: AQR013 | Format: Digital & Vinyl | Release date: November 4, 2019'
   },
-  'aqr010': {
-    title: '747 - Paleo',
-    body: `<a href="https://aquaregiarec.bandcamp.com/album/paleo-pt-1" target="_blank">Paleo, Pt. 1 🛒</a><br><a href="https://aquaregiarec.bandcamp.com/album/paleo-pt-2" target="_blank">Paleo, Pt. 2 🛒</a><br><a href="https://aquaregiarec.bandcamp.com/album/paleo-pt-3" target="_blank">Paleo, Pt. 3 🛒</a><br><br>Tracklist:<br><br>A1: Cretaceous<br>A2: Cambrian<br>B1: Tethys<br>B2: Pangea<br>C1: Astero Ceras<br>C2: Suture Lines<br>D1: Holocene (Vinyl Only)<br>D2: Proxima (Vinyl Only)<br><br>The series explores the geological past of our planet through acid. The four-part series comprises three digital EPs and a concluding double EP vinyl release.`,
-    meta: 'Catalogue: AQR007–010 | Format: Digital & Vinyl | Release dates: 2017–2018'
-  },
+'aqr010': {
+  title: '747 - Paleo',
+  body: `<a href="https://aquaregiarec.bandcamp.com/album/paleo-pt-1" target="_blank">Paleo, Pt. 1 <span class="icon-btn"><i data-feather="shopping-cart"></i></span></a><br><a href="https://aquaregiarec.bandcamp.com/album/paleo-pt-2" target="_blank">Paleo, Pt. 2 <span class="icon-btn"><i data-feather="shopping-cart"></i></span></a><br><a href="https://aquaregiarec.bandcamp.com/album/paleo-pt-3" target="_blank">Paleo, Pt. 3 <span class="icon-btn"><i data-feather="shopping-cart"></i></span></a><br>Paleo<br><br>Tracklist:<br><br>A1: Cretaceous<br>A2: Cambrian<br>B1: Tethys<br>B2: Pangea<br>C1: Astero Ceras<br>C2: Suture Lines<br>D1: Holocene (Vinyl Only)<br>D2: Proxima (Vinyl Only)<br><br>The series explores the geological past of our planet through acid. The four-part series comprises three digital EPs and a concluding double EP vinyl release.`,
+  meta: 'Catalogue: AQR007–010 | Format: Digital & Vinyl | Release dates: 2017–2018'
+},
   'aqr006': {
     title: '747 - Aurora Centralis EP',
     buy: 'https://aquaregiarec.bandcamp.com/album/aurora-centralis-ep',
@@ -676,14 +683,16 @@ const releases = {
 function showRelease(key) {
   const r = releases[key];
   if (!r) return;
-  let html = `<div class="release-header">${r.title}`;
-  if (r.buy) html += ` <a href="${r.buy}" target="_blank" class="icon-btn" title="Buy">🛒</a>`;
-  if (r.listen) html += ` <a href="${r.listen}" target="_blank" class="icon-btn" title="Listen">🔊</a>`;
+  let html = `<div class="release-header">${r.title}<br>`;
+  html += `</div>`;
+  if (r.buy) html += `<div><a href="${r.buy}" target="_blank" class="icon-btn" title="Buy"><i data-feather="shopping-cart"></i></a>`;
+  if (r.listen) html += `<div><a href="${r.listen}" target="_blank" class="icon-btn" title="Listen"><i data-feather="volume-2"></i></a>`;
   html += `</div>`;
   html += `<div class="release-body">${r.body}</div>`;
   if (r.meta) html += `<div class="release-meta">${r.meta}</div>`;
-
+ 
   document.getElementById('release-content').innerHTML = html;
+  feather.replace();
   closeAll(false);
   document.getElementById('overlay-release').classList.add('open');
 }
