@@ -347,7 +347,20 @@
     @media (max-width: 600px) {
       #nav-links { font-size: 0.7rem; gap: 0.6rem; }
       #nav-logo { font-size: 2rem; }
-      .gallery-item { filter: drop-shadow(0.2rem 0.2rem 0.25rem rgba(0,0,0,0.7)); }
+        #freeform-gallery {
+    height: auto !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+       .gallery-item {
+    position: static !important;
+    width: 100% !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+  }
       #page-gallery { padding-top: 20%; } /* adjust to taste */
     }
 
@@ -584,11 +597,11 @@ const galleryItems = [
   { hash: 'J2185437984677799478843116545529', key: 'aqr005',     x: 64.6, y: 82.6, scale: 18, z: 7  },
   { hash: 'T2846391755409688414438905538041', key: 'kasst-remix',x: 13.5, y: 86,   scale: 9,  z: 18 },
   { hash: 'J2185437984788479943285373855225', key: 'aqr019',     x: 20.4, y: 93.9, scale: 12, z: 8  },
-  { hash: 'I2185437984622459246621987890681', key: 'aqr002',     x: 81.5, y: 103,  scale: 11, z: 9  },
-  { hash: 'K2846397506754002459676617926137', key: 'front-left-va', x: 42.6, y: 103, scale: 10, z: 20 },
-  { hash: 'P2185437984604012502548278339065', key: 'aqr001',     x: 60, y: 108,  scale: 12, z: 11 },
-  { hash: 'A2185451120345999950382888576505', key: 'raw-comp',   x: 36.3, y: 110.8,scale: 8,  z: 19 },
-  { hash: 'B2185437984659352734769406993913', key: 'aqr004',     x: 73.3, y: 112.9,scale: 8,  z: 10 },
+  { hash: 'I2185437984622459246621987890681', key: 'aqr002',     x: 81.5, y: 113,  scale: 11, z: 9  },
+  { hash: 'K2846397506754002459676617926137', key: 'front-left-va', x: 42.6, y: 113, scale: 10, z: 20 },
+  { hash: 'P2185437984604012502548278339065', key: 'aqr001',     x: 60, y: 118,  scale: 12, z: 11 },
+  { hash: 'A2185451120345999950382888576505', key: 'raw-comp',   x: 36.3, y: 120.8,scale: 8,  z: 19 },
+  { hash: 'B2185437984659352734769406993913', key: 'aqr004',     x: 73.3, y: 122.9,scale: 8,  z: 10 },
 ];
 
 function buildGallery() {
