@@ -322,6 +322,27 @@
       #nav-logo { font-size: 2rem; }
       .gallery-item { filter: drop-shadow(0.2rem 0.2rem 0.25rem rgba(0,0,0,0.7)); }
     }
+
+     /* ─── FLYING OBJECT ─── */
+    #flying-object-container {
+      position: fixed;
+      inset: 0;
+      z-index: 490;
+      pointer-events: none;
+      overflow: hidden;
+      display: none;
+    }
+ 
+    #flying-object-container.active {
+      display: block;
+    }
+ 
+    .flying-img {
+      position: absolute;
+      will-change: transform;
+      pointer-events: none;
+    }
+ 
   </style>
 </head>
 <body>
@@ -487,6 +508,9 @@
     <div id="release-content"></div>
   </div>
 </div>
+
+<!-- FLYING OBJECT CONTAINER -->
+<div id="flying-object-container"></div>
 
 <script>
 // ─── IMAGE HASHES → Cargo CDN URLs ───
@@ -686,6 +710,97 @@ const releases = {
   },
 };
 
+// ─── LABEL IMAGES FOR FLYING EFFECT ───
+const labelImgs = {
+  'aqr005': ['images/aqr005-label1.png', 'images/aqr005-label2.png'],
+  'aqr006': ['images/aqr006-label1.png', 'images/aqr006-label2.png'],
+  'aqr015': ['images/aqr015-label1.png', 'images/aqr015-label2.png'],
+  'aqr017': ['images/aqr017-label1.png', 'images/aqr017-label2.png'],
+  'aqr022': ['images/aqr022-label1.png', 'images/aqr022-label2.png'],
+  'aqr024': ['images/aqr024-label1.png', 'images/aqr024-label2.png'],
+  'aqr025': ['images/aqr025-label1.png', 'images/aqr025-label2.png'],
+  'aqr027': ['images/aqr027-label1.png', 'images/aqr027-label2.png'],
+  'aqr026': ['images/aqr026-label1.png', 'images/aqr026-label2.png', 'images/aqr026-label3.png', 'images/aqr026-label4.png'],
+  'aqr013': ['images/aqr013-label1.png', 'images/aqr013-label2.png', 'images/aqr013-label3.png', 'images/aqr013-label4.png'],
+  'aqr010': ['images/aqr010-label1.png', 'images/aqr010-label2.png', 'images/aqr010-label3.png', 'images/aqr010-label4.png'],
+};
+ 
+function startFlyingObject(key) {
+  const labels = labelImgs[key];
+  if (!labels) return;
+
+  const container = document.getElementById('flying-object-container');
+  container.innerHTML = '';
+  container.classList.add('active');
+
+  labels.forEach((src, i) => {
+    const img = document.createElement('img');
+    img.className = 'flying-img';
+    img.src = src;
+
+    const sizePx = Math.round(window.innerWidth * 0.18);
+    img.style.width = sizePx + 'px';
+    img.style.position = 'fixed';
+    img.style.filter = 'drop-shadow(8px 8px 8px rgba(0,0,0,0.5))';
+    img.style.opacity = '0';
+
+    container.appendChild(img);
+    setTimeout(() => animateFlyingImg(img), i * 3000);
+  });
+}
+
+function animateFlyingImg(img) {
+  if (!document.getElementById('flying-object-container').classList.contains('active')) return;
+
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const sizePx = img.offsetWidth;
+
+  const startEdge = Math.floor(Math.random() * 4);
+  const endEdge = (startEdge + 2 + Math.floor(Math.random() * 2)) % 4;
+
+  const edgePoint = (edge) => {
+    const t = Math.random();
+    if (edge === 0) return { x: t * w, y: -sizePx };
+    if (edge === 1) return { x: w + sizePx, y: t * h };
+    if (edge === 2) return { x: t * w, y: h + sizePx };
+    return { x: -sizePx, y: t * h };
+  };
+
+  const start = edgePoint(startEdge);
+  const end = edgePoint(endEdge);
+  const rotStart = Math.random() * 360;
+  const rotEnd = rotStart + 720 + Math.random() * 180;
+  const duration = 5000 + Math.random() * 10000;
+
+  // Set start position instantly
+  img.style.transition = 'none';
+  img.style.left = start.x + 'px';
+  img.style.top = start.y + 'px';
+  img.style.transform = `rotate(${rotStart}deg)`;
+
+  // Force reflow then animate
+  img.getBoundingClientRect();
+  img.style.opacity = '1';
+  img.style.transition = `left ${duration}ms linear, top ${duration}ms linear, transform ${duration}ms linear, opacity 1.5s ease`;
+  img.style.left = end.x + 'px';
+  img.style.top = end.y + 'px';
+  img.style.transform = `rotate(${rotEnd}deg)`;
+
+  // Fade out near end then loop
+  setTimeout(() => {
+    if (!document.getElementById('flying-object-container').classList.contains('active')) return;
+    img.style.opacity = '0';
+    setTimeout(() => animateFlyingImg(img), 1500);
+  }, duration - 1500);
+}
+ 
+function stopFlyingObject() {
+  const container = document.getElementById('flying-object-container');
+  container.classList.remove('active');
+  container.innerHTML = '';
+}
+
 function showRelease(key) {
   const r = releases[key];
   if (!r) return;
@@ -701,6 +816,9 @@ function showRelease(key) {
   feather.replace();
   closeAll(false);
   document.getElementById('overlay-release').classList.add('open');
+
+  const imgSrc = localImgs[key] || 'images/' + key + '.jpg';
+  startFlyingObject(key);
 }
 
 function showOverlay(name) {
@@ -710,10 +828,12 @@ function showOverlay(name) {
 
 function closeOverlay(name) {
   document.getElementById('overlay-' + name).classList.remove('open');
+  if (name === 'release') stopFlyingObject();
 }
-
+ 
 function closeAll(full = true) {
   document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open'));
+  stopFlyingObject();
 }
 
 document.addEventListener('keydown', e => {
