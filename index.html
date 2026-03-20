@@ -317,16 +317,24 @@
  
     .ext-link {
       font-size: 0.85rem;
-      opacity: 0.7;
+      opacity: 1;
     }
 
     #overlay-mixes .overlay-panel {
      background: rgba(80, 80, 80, 0.92);
      color: rgba(255, 255, 255, 0.85);
+     max-width: 45rem;
     }
 
-    #overlay-mixes .overlay-panel a { color: rgba(255, 255, 255, 0.85); }
-    #overlay-mixes .overlay-panel h2 { color: rgba(255, 255, 255, 0.85); }
+    #overlay-mixes .overlay-panel a { 
+        color: rgba(255, 255, 255, 0.85);
+        font-weight:400;
+        text-decoration: none; }
+
+    #overlay-mixes .overlay-panel h2 { 
+        color: rgba(255, 255, 255, 0.85); 
+    }
+
  
     /* Info */
     #overlay-info .overlay-panel {
@@ -346,7 +354,7 @@
     /* Mobile adjustments */
     @media (max-width: 600px) {
       #nav-links { font-size: 1rem; gap: 0.6rem; }
-      #nav-logo { font-size: 2rem; }
+      #nav-logo { font-size: 2rem; margin-right: 0;}
         #freeform-gallery {
     height: auto !important;
     display: grid;
@@ -467,41 +475,35 @@
     <h2>747 mixes</h2>
     <div class="sep-line">------------</div>
 
-    Monument - MNMT 374 <a class="ext-link" href="https://soundcloud.com/monument-podcast/mnmt-374-747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    Slam Radio - recorded @ About Blank <a class="ext-link" href="https://soundcloud.com/slam_djs/slamradio-310-747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    747 HATE Podcast 162 <a class="ext-link" href="https://www.youtube.com/watch?v=ShGbSriu-VI&t=2927s" target="_blank">↗</a><br>
-    Dublab Radio 08.09.25 <a class="ext-link" href="https://www.dublab.com/archive/747-guest-session-08-09-25" target="_blank">↗</a><br>
-    CS Radio 08.03.25 <a class="ext-link" href="https://youtu.be/0BABrSHqltU?si=R4Mu97KUf_BeGufZ" target="_blank">[ ▸ ]</a><br>
-    Artaphine Series 066 <a class="ext-link" href="https://soundcloud.com/artaphine/747-artaphine-series-066?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    Elements Podcast 009 <a class="ext-link" href="https://soundcloud.com/about-blank-berlin/elements-podcast-009?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    Techno Cave 020 <a class="ext-link" href="https://soundcloud.com/techno-cave/747-techno-cave-podcast-020?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    Temper Talents 02 <a class="ext-link" href="https://soundcloud.com/temper-talents/temper-talents-podcast-747-002?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    Quarantine Stream<br>
-    &nbsp;&nbsp;- 6AM/Deviation Agency <a class="ext-link" href="https://www.youtube.com/watch?v=oaPw9zSHys8&t=1065s" target="_blank">[ ▸ ]</a><br>
-    Newtown Welcomes: 747 [EP.14] <a class="ext-link" href="https://www.youtube.com/watch?v=GX6OeGydXcg&t=5941s" target="_blank">[ ▸ ]</a><br>
-    The Forgotten CCXLI <a class="ext-link" href="https://soundcloud.com/theforgottenrec/the-forgotten-261?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    Erratic Podcast 223 <a class="ext-link" href="https://soundcloud.com/erraticnyc/erratic-podcast-223-747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    KNTXT: 747 <a class="ext-link" href="https://soundcloud.com/kntxtmusic/charlotte-de-witte-presents-kntxt-74717112018?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    Tech Clubbers #197 <a class="ext-link" href="https://soundcloud.com/techclubbers/747-tech-clubbers-podcast-197?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    You Play I Write 53 <a class="ext-link" href="https://soundcloud.com/vanitydust/ypiw747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
-    Equinox Invites 006 <a class="ext-link" href="https://soundcloud.com/equinox-melbourne/equinox-invites-006-747?in=747/sets/sets-podcasts" target="_blank">↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/monument-podcast/mnmt-374-747?in=747/sets/sets-podcasts" target="_blank">Monument - MNMT 374  ↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/slam_djs/slamradio-310-747?in=747/sets/sets-podcasts" target="_blank">Slam Radio - recorded @ About Blank ↗</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=ShGbSriu-VI&t=2927s" target="_blank">747 HATE Podcast 162 ↗</a><br>
+    <a class="ext-link" href="https://www.dublab.com/archive/747-guest-session-08-09-25" target="_blank">Dublab Radio 08.09.25 ↗</a><br>
+    <a class="ext-link" href="https://youtu.be/0BABrSHqltU?si=R4Mu97KUf_BeGufZ" target="_blank">CS Radio 08.03.25 [ ▸ ]</a><br>
+    <a class="ext-link" href="https://soundcloud.com/artaphine/747-artaphine-series-066?in=747/sets/sets-podcasts" target="_blank">Artaphine Series 066 ↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/about-blank-berlin/elements-podcast-009?in=747/sets/sets-podcasts" target="_blank">Elements Podcast 009 ↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/techno-cave/747-techno-cave-podcast-020?in=747/sets/sets-podcasts" target="_blank">Techno Cave 020 ↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/temper-talents/temper-talents-podcast-747-002?in=747/sets/sets-podcasts" target="_blank">Temper Talents 02 ↗</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=oaPw9zSHys8&t=1065s" target="_blank">Quarantine Stream - 6AM/Deviation Agency [ ▸ ]</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=GX6OeGydXcg&t=5941s" target="_blank">Newtown Welcomes: 747 [EP.14] [ ▸ ]</a><br>
+    <a class="ext-link" href="https://soundcloud.com/theforgottenrec/the-forgotten-261?in=747/sets/sets-podcasts" target="_blank">The Forgotten CCXLI ↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/erraticnyc/erratic-podcast-223-747?in=747/sets/sets-podcasts" target="_blank">Erratic Podcast 223 ↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/kntxtmusic/charlotte-de-witte-presents-kntxt-74717112018?in=747/sets/sets-podcasts" target="_blank">KNTXT: 747 ↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/techclubbers/747-tech-clubbers-podcast-197?in=747/sets/sets-podcasts" target="_blank">Tech Clubbers #197 ↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/vanitydust/ypiw747?in=747/sets/sets-podcasts" target="_blank">You Play I Write 53 ↗</a><br>
+    <a class="ext-link" href="https://soundcloud.com/equinox-melbourne/equinox-invites-006-747?in=747/sets/sets-podcasts" target="_blank">Equinox Invites 006 ↗</a><br>
     <br>
-    Aquaregia Studio Mix No.24<br>
-    &nbsp;&nbsp;- all vinyl, all 90s <a class="ext-link" href="https://www.youtube.com/watch?v=fs3ZShI5xt0&t=5s" target="_blank">[ ▸ ]</a><br>
-    Aquaregia Studio Mix No.21 <a class="ext-link" href="https://www.youtube.com/watch?v=o0UChlJxEng&t=5444s" target="_blank">[ ▸ ]</a><br>
-    Aquaregia Studio Mix No.20 <a class="ext-link" href="https://www.youtube.com/watch?v=Bi6_XdA4Joo" target="_blank">[ ▸ ]</a><br>
-    Aquaregia Studio Mix No.16<br>
-    &nbsp;&nbsp;- recorded @ rex club 4/26/19 <a class="ext-link" href="https://www.youtube.com/watch?v=JEAH7IFSqNM" target="_blank">↗</a><br>
-    Aquaregia Studio Mix No.13 <a class="ext-link" href="https://www.youtube.com/watch?v=dowXG2Bqftg" target="_blank">[ ▸ ]</a><br>
-    Aquaregia Studio Mix No.9<br>
-    &nbsp;&nbsp;- all vinyl <a class="ext-link" href="https://www.youtube.com/watch?v=2j60FQG1EGk" target="_blank">[ ▸ ]</a><br>
-    Aquaregia Studio Mix No.6 <a class="ext-link" href="https://www.youtube.com/watch?v=ms7hA4zdMN0" target="_blank">↗</a><br>
-    Aquaregia Studio Mix No.4 <a class="ext-link" href="https://www.youtube.com/watch?v=qCBVgyhmoZE" target="_blank">↗</a><br>
-    Aquaregia Studio Mix No.3<br>
-    &nbsp;&nbsp;- 100% vinyl <a class="ext-link" href="https://www.youtube.com/watch?v=EbEOqX6jOgM" target="_blank">[ ▸ ]</a><br>
-    Aquaregia Studio Mix No.2 <a class="ext-link" href="https://www.youtube.com/watch?v=nxqNHHzR_h8" target="_blank">↗</a><br>
-    Aquaregia Studio Mix No.1<br>
-    &nbsp;&nbsp;- 100% vinyl, b2b Emily Nicoll <a class="ext-link" href="https://www.youtube.com/watch?v=6CCmyEgJalo" target="_blank">[ ▸ ]</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=fs3ZShI5xt0&t=5s" target="_blank">Aquaregia Studio Mix No.24 - all vinyl, all 90s [ ▸ ]</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=o0UChlJxEng&t=5444s" target="_blank">Aquaregia Studio Mix No.21 [ ▸ ]</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=Bi6_XdA4Joo" target="_blank">Aquaregia Studio Mix No.20 [ ▸ ]</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=JEAH7IFSqNM" target="_blank">Aquaregia Studio Mix No.16 - recorded @ rex club 4/26/19 ↗</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=dowXG2Bqftg" target="_blank">Aquaregia Studio Mix No.13 [ ▸ ]</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=2j60FQG1EGk" target="_blank">Aquaregia Studio Mix No.9 - all vinyl [ ▸ ]</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=ms7hA4zdMN0" target="_blank">Aquaregia Studio Mix No.6 ↗</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=qCBVgyhmoZE" target="_blank">Aquaregia Studio Mix No.4 ↗</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=EbEOqX6jOgM" target="_blank">Aquaregia Studio Mix No.3 - 100% vinyl [ ▸ ]</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=nxqNHHzR_h8" target="_blank">Aquaregia Studio Mix No.2 ↗</a><br>
+    <a class="ext-link" href="https://www.youtube.com/watch?v=6CCmyEgJalo" target="_blank">Aquaregia Studio Mix No.1 - 100% vinyl, b2b Emily Nicoll [ ▸ ]</a><br>
     <br>
     <span style="font-size:0.75rem; opacity:0.8;">[ ▸ ] = video/stream link</span>
   </div>
@@ -778,7 +780,8 @@ function startFlyingObject(key) {
     img.className = 'flying-img';
     img.src = src;
 
-    const sizePx = Math.round(window.innerWidth * 0.18);
+    const isMobile = window.innerWidth <= 600;
+    const sizePx = Math.round(window.innerWidth * (isMobile ? 0.45 : 0.18));
     img.style.width = sizePx + 'px';
     img.style.position = 'fixed';
     img.style.filter = 'drop-shadow(8px 8px 8px rgba(0,0,0,0.5))';
