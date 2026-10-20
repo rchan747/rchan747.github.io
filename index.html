@@ -468,6 +468,7 @@
 
     <div class="section-label" style="margin-top:1rem;">remix eps</div>
     <div>-</div>
+    <a href="#" onclick="showRelease('aqr030'); return false;">AQR030</a> - PACIFIC SPIRIT (THE REMIXES)<br>
     <a href="#" onclick="showRelease('aqr015'); return false;">AQR015</a> - AURORA CENTRALIS (THE REMIXES)<br>
     <a href="#" onclick="showRelease('aqr004'); return false;">AQR004</a> - MY BRAIN IS MELTING (THE REMIXES)<br>
 
@@ -579,6 +580,7 @@
 const localImgs = {
   'aqr026':      'images/aqr026.jpg',
   'aqr026mixed': 'images/aqr026mixed.jpg',
+  'aqr030':      'images/aqr030.jpg',
   'aqr027':      'images/aqr027.png',
   'aqr025':      'images/aqr025.png',
   'aqr024':      'images/aqr024.jpg',
@@ -602,32 +604,33 @@ const localImgs = {
 // ─── GALLERY ITEMS ───
 // [hash, href-key, freeform-x%, freeform-y%, scale-vw, z]
 const galleryItems = [
-  { hash: 'N2846392545981799181409159144953', key: 'aqr026',        x: 9.5,  y: 0,     scale: 22, z: 12, alt: '747 - Pacific Spirit' },
-  { hash: 'Y2185437984751586455137954751993', key: 'aqr013',        x: 63.3, y: 6,     scale: 22, z: 2,  alt: '747 - The Gate of Life' },
-  { hash: 'P2846394010339683984694495077881', key: 'aqr026mixed',   x: 30,   y: 14,    scale: 20, z: 13, alt: '747 - Pacific Spirit (Continuous Mix)' },
-  { hash: 'T2185446034504871852364669838841', key: 'aqr006',        x: 80.7, y: 23,    scale: 19, z: 1,  alt: '747 - Aurora Centralis EP' },
-  { hash: 'L2846393280106873082828184806905', key: 'aqr027',        x: 17,   y: 29,    scale: 20, z: 14, alt: 'Various Artists - 10' },
-  { hash: 'K2185437984843820175506502510073', key: 'aqr024',        x: 56.2, y: 37,    scale: 16, z: 5,  alt: '747 - Veiltail / Stairway' },
-  { hash: 'J2181824782583747803799642367481', key: 'aqr025',        x: 4.6,  y: 44,    scale: 18, z: 15, alt: '747 - Deep Space Opera EP' },
-  { hash: 'Y2185439203177479267727548540409', key: 'aqr017',        x: 45.2, y: 50.7,  scale: 14, z: 3,  alt: '747 - While My 303 Gently Weeps EP' },
-  { hash: 'O2185437984770033199211664303609', key: 'aqr015',        x: 55.5, y: 61.3,  scale: 13, z: 4,  alt: '747 - Aurora Centralis (The Remixes)' },
-  { hash: 'K2185444503757155127798657639929', key: 'aqr010',        x: 76.4, y: 64,    scale: 19, z: 6,  alt: '747 - Paleo' },
-  { hash: 'C2185437984806926687359083406841', key: 'aqr022',        x: 1.5,  y: 73.3,  scale: 15, z: 17, alt: 'Blazej Malinowski - Moods EP' },
-  { hash: 'C2185437984640905990695697442297', key: 'aqr003',        x: 30.7, y: 76.3,  scale: 19, z: 16, alt: '747 - Spice Garden EP' },
-  { hash: 'J2185437984677799478843116545529', key: 'aqr005',        x: 64.6, y: 82.6,  scale: 18, z: 7,  alt: '747 - Ammonite EP' },
-  { hash: 'T2846391755409688414438905538041', key: 'kasst-remix',   x: 13.5, y: 86,    scale: 9,  z: 18, alt: 'Kas:st - The Light At The End Of The Tunnel EP' },
-  { hash: 'J2185437984788479943285373855225', key: 'aqr019',        x: 20.4, y: 93.9,  scale: 12, z: 8,  alt: 'Various Artists - Acid Analects Vol. 1' },
-  { hash: 'I2185437984622459246621987890681', key: 'aqr002',        x: 81.5, y: 113,   scale: 11, z: 9,  alt: '747 - Alien Alien EP' },
-  { hash: 'K2846397506754002459676617926137', key: 'front-left-va', x: 42.6, y: 113,   scale: 10, z: 20, alt: 'Various Artists - Front Left VA 03' },
-  { hash: 'P2185437984604012502548278339065', key: 'aqr001',        x: 60,   y: 118,   scale: 12, z: 11, alt: '747 - My Brain Is Melting EP' },
-  { hash: 'A2185451120345999950382888576505', key: 'raw-comp',      x: 36.3, y: 120.8, scale: 8,  z: 19, alt: 'Various Artists - RAW Summer Hits 3' },
-  { hash: 'B2185437984659352734769406993913', key: 'aqr004',        x: 73.3, y: 122.9, scale: 8,  z: 10, alt: '747 - My Brain Is Melting EP (The Remixes)' },
+  { key: 'aqr030',        x: 38,   y: 0,     scale: 22, z: 21, alt: '747 - Pacific Spirit (The Remixes)' },
+  { hash: 'N2846392545981799181409159144953', key: 'aqr026',        x: 9.5,  y: 20,     scale: 22, z: 12, alt: '747 - Pacific Spirit' },
+  { hash: 'Y2185437984751586455137954751993', key: 'aqr013',        x: 63.3, y: 26,     scale: 22, z: 2,  alt: '747 - The Gate of Life' },
+  { hash: 'P2846394010339683984694495077881', key: 'aqr026mixed',   x: 30,   y: 34,    scale: 20, z: 13, alt: '747 - Pacific Spirit (Continuous Mix)' },
+  { hash: 'T2185446034504871852364669838841', key: 'aqr006',        x: 80.7, y: 43,    scale: 19, z: 1,  alt: '747 - Aurora Centralis EP' },
+  { hash: 'L2846393280106873082828184806905', key: 'aqr027',        x: 17,   y: 49,    scale: 20, z: 14, alt: 'Various Artists - 10' },
+  { hash: 'K2185437984843820175506502510073', key: 'aqr024',        x: 56.2, y: 57,    scale: 16, z: 5,  alt: '747 - Veiltail / Stairway' },
+  { hash: 'J2181824782583747803799642367481', key: 'aqr025',        x: 4.6,  y: 64,    scale: 18, z: 15, alt: '747 - Deep Space Opera EP' },
+  { hash: 'Y2185439203177479267727548540409', key: 'aqr017',        x: 45.2, y: 70.7,  scale: 14, z: 3,  alt: '747 - While My 303 Gently Weeps EP' },
+  { hash: 'O2185437984770033199211664303609', key: 'aqr015',        x: 55.5, y: 81.3,  scale: 13, z: 4,  alt: '747 - Aurora Centralis (The Remixes)' },
+  { hash: 'K2185444503757155127798657639929', key: 'aqr010',        x: 76.4, y: 84,    scale: 19, z: 6,  alt: '747 - Paleo' },
+  { hash: 'C2185437984806926687359083406841', key: 'aqr022',        x: 1.5,  y: 93.3,  scale: 15, z: 17, alt: 'Blazej Malinowski - Moods EP' },
+  { hash: 'C2185437984640905990695697442297', key: 'aqr003',        x: 30.7, y: 96.3,  scale: 19, z: 16, alt: '747 - Spice Garden EP' },
+  { hash: 'J2185437984677799478843116545529', key: 'aqr005',        x: 64.6, y: 102.6,  scale: 18, z: 7,  alt: '747 - Ammonite EP' },
+  { hash: 'T2846391755409688414438905538041', key: 'kasst-remix',   x: 13.5, y: 106,    scale: 9,  z: 18, alt: 'Kas:st - The Light At The End Of The Tunnel EP' },
+  { hash: 'J2185437984788479943285373855225', key: 'aqr019',        x: 20.4, y: 113.9,  scale: 12, z: 8,  alt: 'Various Artists - Acid Analects Vol. 1' },
+  { hash: 'I2185437984622459246621987890681', key: 'aqr002',        x: 81.5, y: 133,   scale: 11, z: 9,  alt: '747 - Alien Alien EP' },
+  { hash: 'K2846397506754002459676617926137', key: 'front-left-va', x: 42.6, y: 133,   scale: 10, z: 20, alt: 'Various Artists - Front Left VA 03' },
+  { hash: 'P2185437984604012502548278339065', key: 'aqr001',        x: 60,   y: 138,   scale: 12, z: 11, alt: '747 - My Brain Is Melting EP' },
+  { hash: 'A2185451120345999950382888576505', key: 'raw-comp',      x: 36.3, y: 140.8, scale: 8,  z: 19, alt: 'Various Artists - RAW Summer Hits 3' },
+  { hash: 'B2185437984659352734769406993913', key: 'aqr004',        x: 73.3, y: 142.9, scale: 8,  z: 10, alt: '747 - My Brain Is Melting EP (The Remixes)' },
 ];
 
 function buildGallery() {
   const container = document.getElementById('freeform-gallery');
   // Make container tall enough
-  container.style.height = '140vh';
+  container.style.height = '160vh';
 
   galleryItems.forEach(item => {
     const div = document.createElement('div');
@@ -650,6 +653,12 @@ function buildGallery() {
 
 // ─── RELEASE DATA ───
 const releases = {
+  'aqr030': {
+    title: '747 - Pacific Spirit - The Remixes',
+    buy: 'https://aquaregiarec.bandcamp.com/album/pacific-spirit-the-remixes',
+    body: `Tracklist:<br><br>A1: Sea to Sky (Eusebeia Remix)<br>A2: Cascadia (Etapp Kyle Remix)<br>B1: Coquihalla (Ness Remix)<br>B2: Pacific Spirit (.VRIL Remix)<br><br>747's 2025 album Pacific Spirit is reinterpreted across four distinct visions as Eusebeia, Etapp Kyle, Ness, and .VRIL step up to rework select cuts from the LP. The pack starts out dreamy and atmospheric with Eusebeia's halftime remix of Sea to Sky, while Etapp Kyle transforms Cascadia into a melancholic hymn. Ness opens the B side at 170bpm to deliver a thunderous remix of Coquihalla, and .VRIL takes on Pacific Spirit, colouring it with sweeping, dramatic textures to close.`,
+    meta: 'Catalogue: AQR030<br>Format: Digital & Vinyl<br>Release date: November 20, 2026'
+  },
   'aqr027': {
     title: 'Various Artists - 10',
     buy: 'https://aquaregiarec.bandcamp.com/album/10',
@@ -783,6 +792,7 @@ const labelImgs = {
   'aqr026': ['images/aqr026-label1.png', 'images/aqr026-label2.png', 'images/aqr026-label3.png', 'images/aqr026-label4.png'],
   'aqr013': ['images/aqr013-label1.png', 'images/aqr013-label2.png', 'images/aqr013-label3.png', 'images/aqr013-label4.png'],
   'aqr010': ['images/aqr010-label1.png', 'images/aqr010-label2.png', 'images/aqr010-label3.png', 'images/aqr010-label4.png'],
+  'aqr030': ['images/aqr030-label1.png', 'images/aqr030-label2.png'],
 };
  
 function startFlyingObject(key) {
