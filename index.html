@@ -280,6 +280,30 @@
       line-height: 1.65;
     }
  
+
+     /* Standard Bandcamp players with small artwork sit below the release details. */
+     .release-players {
+       margin-top: 1.25rem;
+     }
+     .release-player {
+       margin-bottom: 0.65rem;
+     }
+     .release-player:last-child {
+       margin-bottom: 0;
+     }
+     .release-player iframe {
+       display: block;
+       width: 100%;
+       height: 120px;
+       border: 0;
+       background: #fff;
+     }
+     .release-player-link {
+       display: inline-block;
+       font-size: 0.8rem;
+       text-decoration: underline !important;
+     }
+
     .icon-btn {
       display: inline-block;
       font-size: 0.8rem;
@@ -658,6 +682,7 @@ const releases = {
     buy: 'https://aquaregiarec.bandcamp.com/album/pacific-spirit-the-remixes',
     body: `Tracklist:<br><br>A1: Sea to Sky (Eusebeia Remix)<br>A2: Cascadia (Etapp Kyle Remix)<br>B1: Coquihalla (Ness Remix)<br>B2: Pacific Spirit (.VRIL Remix)<br><br>747's 2025 album Pacific Spirit is reinterpreted across four distinct visions as Eusebeia, Etapp Kyle, Ness, and .VRIL step up to rework select cuts from the LP. The pack starts out dreamy and atmospheric with Eusebeia's halftime remix of Sea to Sky, while Etapp Kyle transforms Cascadia into a melancholic hymn. Ness opens the B side at 170bpm to deliver a thunderous remix of Coquihalla, and .VRIL takes on Pacific Spirit, colouring it with sweeping, dramatic textures to close.`,
     meta: 'Catalogue: AQR030<br>Format: Digital & Vinyl<br>Release date: November 20, 2026'
+    
   },
   'aqr027': {
     title: 'Various Artists - 10',
@@ -871,21 +896,321 @@ function stopFlyingObject() {
   container.innerHTML = '';
 }
 
+// ─── BANDCAMP PLAYERS ───
+// Bandcamp's official player needs a numeric album ID. Where that ID is not
+// yet recorded below, look it up from the release's public Bandcamp page.
+// Add any new IDs here to avoid a network lookup when visitors open a popup.
+const bandcampAlbumIds = {
+  'https://aquaregiarec.bandcamp.com/album/aurora-centralis-the-remixes': '357197760',
+  'https://aquaregiarec.bandcamp.com/album/the-gate-of-life': '1820579051',
+  'https://aquaregiarec.bandcamp.com/album/pacific-spirit': '3507238487',
+  'https://aquaregiarec.bandcamp.com/album/veiltail-stairway': '363012614',
+  'https://aquaregiarec.bandcamp.com/album/while-my-303-gently-weeps-ep': '2729518367',
+  'https://aquaregiarec.bandcamp.com/album/aurora-centralis-ep': '1484398284',
+  'https://aquaregiarec.bandcamp.com/album/ammonite-ep': '3098337690',
+  'https://aquaregiarec.bandcamp.com/album/spice-garden-ep': '83065484',
+  'https://aquaregiarec.bandcamp.com/album/alien-alien-ep': '787911083',
+  'https://aquaregiarec.bandcamp.com/album/my-brain-is-melting-ep': '205517514',
+  'https://aquaregiarec.bandcamp.com/album/my-brain-is-melting-ep-the-remixes': '1005298945',
+  'https://aquaregiarec.bandcamp.com/album/10': '3403802896'
+};
+
+// Paleo comprises three separate Bandcamp releases, but shares one popup.
+const bandcampMultiAlbums = {
+  'aqr010': [
+    'https://aquaregiarec.bandcamp.com/album/paleo-pt-1',
+    'https://aquaregiarec.bandcamp.com/album/paleo-pt-2',
+    'https://aquaregiarec.bandcamp.com/album/paleo-pt-3'
+  ]
+};
+
+// These popups feature one 747 contribution to a larger compilation or remix EP.
+// Embed that contribution only, rather than the other artists' tracks.
+// The track numbers and titles correspond to the official Bandcamp tracklists.
+const bandcampSingleTracks = {
+  'aqr027': {
+    title: '747 - Decades', searchTitle: 'Decades', trackIndex: 5, trackUrl: 'https://aquaregiarec.bandcamp.com/track/decades'
+  },
+  'aqr019': {
+    title: '747 - Domain Expansion', searchTitle: 'Domain Expansion', trackIndex: 3, trackUrl: 'https://aquaregiarec.bandcamp.com/track/domain-expansion'
+  },
+  'front-left-va': {
+    title: '747 - Rolling Thunder', searchTitle: 'Rolling Thunder', trackIndex: 1, trackUrl: 'https://frontleftrecords.bandcamp.com/track/rolling-thunder'
+  },
+  'raw-comp': {
+    title: 'Kavinsky - Nightcall (747 Edit)', searchTitle: 'Nightcall (747 Edit)', trackIndex: 7,
+    trackUrl: 'https://rawppl.bandcamp.com/track/kavinsky-nightcall-747-edit'
+  },
+  'aqr022': {
+    title: 'Acid Theory (747 Remix)', searchTitle: 'Acid Theory (747 Remix)', trackIndex: 4,
+    trackUrl: 'https://aquaregiarec.bandcamp.com/track/acid-theory-747-remix'
+  },
+  'kasst-remix': {
+    title: 'Kas:st - The Light At The End Of The Tunnel (747 Remix)',
+    searchTitle: 'The Light At The End Of The Tunnel (747 Remix)', trackIndex: 4,
+    trackUrl: 'https://materiamusicofficial.bandcamp.com/track/kas-st-the-light-at-the-end-of-the-tunnel-747-remix'
+  }
+};
+
+// If a verified track ID is available, it can be recorded here to avoid
+// needing to resolve it from the public Bandcamp page in visitors' browsers.
+const bandcampTrackIds = {
+  'aqr027':'3977912371',
+  'front-left-va': '2167906217',
+  'aqr019': '3305865766',
+  'raw-comp': '3369795683',
+  'aqr022': '2038415079',
+  'kasst-remix': '3706261863'
+};
+const bandcampTrackLookups = new Map();
+
+function normalizeBandcampTitle(value) {
+  return String(value || '').normalize('NFKD').toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
+}
+
+function extractBandcampTrackId(markup, spec, fromTrackPage) {
+  const doc = new DOMParser().parseFromString(markup, 'text/html');
+
+  if (fromTrackPage) {
+    // Bandcamp publishes the numeric track ID on its public track pages.
+    const props = doc.querySelector('meta[name="bc-page-properties"]');
+    if (props) {
+      try {
+        const page = JSON.parse(props.getAttribute('content'));
+        if ((page.item_type === 't' || page.item_type === 'track') && /^\d+$/.test(String(page.item_id))) {
+          return String(page.item_id);
+        }
+      } catch (e) { /* Try the official embedded-player metadata. */ }
+    }
+    const player = doc.querySelector('meta[property="twitter:player"], meta[name="twitter:player"]');
+    const match = player && (player.getAttribute('content') || '').match(/\/track=(\d+)/);
+    if (match) return match[1];
+  }
+
+  // The album's trackinfo associates each title/track number with its numeric ID.
+  const candidates = doc.querySelectorAll('[data-tralbum]');
+  for (const element of candidates) {
+    try {
+      const data = JSON.parse(element.getAttribute('data-tralbum'));
+      if (!Array.isArray(data.trackinfo)) continue;
+      const expectedTitle = normalizeBandcampTitle(spec.searchTitle);
+      const isMatch = track => normalizeBandcampTitle(track.title).includes(expectedTitle);
+      const selected = data.trackinfo.find(track =>
+        Number(track.track_num) === spec.trackIndex && isMatch(track)) ||
+        data.trackinfo.find(isMatch);
+      if (selected && /^\d+$/.test(String(selected.track_id))) {
+        return String(selected.track_id);
+      }
+    } catch (e) { /* Check other embedded metadata nodes. */ }
+  }
+
+  // Bandcamp's schema.org JSON-LD also includes track IDs on many album pages.
+  for (const script of doc.querySelectorAll('script[type="application/ld+json"]')) {
+    try {
+      const schema = JSON.parse(script.textContent);
+      const entries = schema.track && schema.track.itemListElement;
+      if (!Array.isArray(entries)) continue;
+      const expectedTitle = normalizeBandcampTitle(spec.searchTitle);
+      const entry = entries.find(row =>
+        Number(row.position) === spec.trackIndex &&
+        normalizeBandcampTitle(row.item && row.item.name).includes(expectedTitle)) ||
+        entries.find(row => normalizeBandcampTitle(row.item && row.item.name).includes(expectedTitle));
+      if (!entry) continue;
+      const properties = entry.item && entry.item.additionalProperty;
+      const idProp = Array.isArray(properties) && properties.find(prop => prop.name === 'track_id');
+      if (idProp && /^\d+$/.test(String(idProp.value))) return String(idProp.value);
+    } catch (e) { /* No usable structured track metadata. */ }
+  }
+  return null;
+}
+
+async function findBandcampTrackId(key, release) {
+  if (bandcampTrackIds[key]) return bandcampTrackIds[key];
+  if (bandcampTrackLookups.has(key)) return bandcampTrackLookups.get(key);
+  const spec = bandcampSingleTracks[key];
+  if (!spec || !release.buy) return null;
+
+  const lookup = (async () => {
+    // Read only the published Bandcamp metadata. The resulting iframe streams
+    // directly from Bandcamp; none of these services handles playback.
+    const pages = spec.trackUrl ? [spec.trackUrl, release.buy] : [release.buy];
+    for (const page of pages) {
+      const sources = [
+        'https://proxy.cors.dev/' + page,
+        'https://api.allorigins.win/raw?url=' + encodeURIComponent(page),
+        'https://corsproxy.io/?url=' + encodeURIComponent(page)
+      ];
+      for (const source of sources) {
+        try {
+          const response = await fetch(source, {
+            credentials: 'omit', signal: AbortSignal.timeout(6500)
+          });
+          if (!response.ok) continue;
+          const id = extractBandcampTrackId(await response.text(), spec, page === spec.trackUrl);
+          if (id) {
+            bandcampTrackIds[key] = id;
+            return id;
+          }
+        } catch (e) { /* Try another public lookup endpoint. */ }
+      }
+    }
+    return null;
+  })();
+  bandcampTrackLookups.set(key, lookup);
+  const result = await lookup;
+  if (!result) bandcampTrackLookups.delete(key);
+  return result;
+}
+
+const bandcampLookups = new Map();
+
+function bandcampUrlsForRelease(key, release) {
+  if (bandcampMultiAlbums[key]) return bandcampMultiAlbums[key];
+  if (release.buy && /https:\/\/[^/]+\.bandcamp\.com\/album\//.test(release.buy)) {
+    return [release.buy];
+  }
+  return [];
+}
+
+function extractBandcampAlbumId(markup) {
+  const doc = new DOMParser().parseFromString(markup, 'text/html');
+  const props = doc.querySelector('meta[name="bc-page-properties"]');
+  if (props) {
+    try {
+      const albumId = JSON.parse(props.getAttribute('content')).item_id;
+      if (/^\d+$/.test(String(albumId))) return String(albumId);
+    } catch (e) { /* Try the player metadata instead. */ }
+  }
+  const player = doc.querySelector('meta[property="twitter:player"], meta[name="twitter:player"]');
+  const url = player && player.getAttribute('content');
+  const idMatch = url && url.match(/\/album=(\d+)/);
+  return idMatch ? idMatch[1] : null;
+}
+
+async function findBandcampAlbumId(url) {
+  if (bandcampAlbumIds[url]) return bandcampAlbumIds[url];
+  if (bandcampLookups.has(url)) return bandcampLookups.get(url);
+
+  const lookup = (async () => {
+    // Bandcamp doesn't permit direct cross-origin page reads. The lightweight
+    // public proxies are only used to read the public album ID; playback is
+    // always served directly by Bandcamp's official embedded player.
+    const sources = [
+      'https://proxy.cors.dev/' + url,
+      'https://api.allorigins.win/raw?url=' + encodeURIComponent(url)
+    ];
+    for (const source of sources) {
+      try {
+        const response = await fetch(source, {
+          credentials: 'omit',
+          signal: AbortSignal.timeout(7500)
+        });
+        if (!response.ok) continue;
+        const id = extractBandcampAlbumId(await response.text());
+        if (id) {
+          bandcampAlbumIds[url] = id;
+          return id;
+        }
+      } catch (e) { /* Try another source; keep the direct Bandcamp link. */ }
+    }
+    return null;
+  })();
+  bandcampLookups.set(url, lookup);
+  const result = await lookup;
+  if (!result) bandcampLookups.delete(url);
+  return result;
+}
+
+function renderBandcampPlayers(key, release) {
+  const container = document.getElementById('release-players');
+  if (!container) return;
+
+  // Individual 747 tracks featured on multi-artist or remix releases.
+  // Never fall back to an album player here: that would play unrelated tracks.
+  const single = bandcampSingleTracks[key];
+  if (single) {
+    const slot = document.createElement('div');
+    slot.className = 'release-player';
+    const link = document.createElement('a');
+    link.href = single.trackUrl || release.buy;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.className = 'release-player-link';
+    link.textContent = `listen to ${single.title} on bandcamp ↗`;
+    slot.appendChild(link);
+    container.appendChild(slot);
+
+    findBandcampTrackId(key, release).then(trackId => {
+      const content = document.getElementById('release-content');
+      if (!trackId || !slot.isConnected || content.dataset.releaseKey !== key ||
+          !document.getElementById('overlay-release').classList.contains('open')) return;
+      const iframe = document.createElement('iframe');
+      iframe.title = `${single.title} — Bandcamp player`;
+      iframe.src = `https://bandcamp.com/EmbeddedPlayer/track=${trackId}/size=large/bgcol=ffffff/linkcol=333333/tracklist=false/artwork=small/transparent=true/`;
+      iframe.setAttribute('loading', 'lazy');
+      iframe.setAttribute('allow', 'autoplay');
+      slot.replaceChildren(iframe);
+    });
+    return;
+  }
+
+  // Full albums and EPs keep their original Bandcamp album players.
+  const urls = bandcampUrlsForRelease(key, release);
+  if (!urls.length) return;
+  urls.forEach(async (url, index) => {
+    const slot = document.createElement('div');
+    slot.className = 'release-player';
+    const label = urls.length > 1 ? `listen to paleo pt. ${index + 1} on bandcamp ↗` : 'listen on bandcamp ↗';
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.className = 'release-player-link';
+    link.textContent = label;
+    slot.appendChild(link);
+    container.appendChild(slot);
+
+    const albumId = await findBandcampAlbumId(url);
+    // Don't insert a late-arriving player into another release's popup.
+    if (!albumId || !slot.isConnected ||
+        document.getElementById('release-content').dataset.releaseKey !== key ||
+        !document.getElementById('overlay-release').classList.contains('open')) return;
+
+    const iframe = document.createElement('iframe');
+    iframe.title = `${release.title} — Bandcamp player${urls.length > 1 ? `, part ${index + 1}` : ''}`;
+    iframe.src = `https://bandcamp.com/EmbeddedPlayer/album=${albumId}/size=large/bgcol=ffffff/linkcol=333333/tracklist=false/artwork=small/transparent=true/`;
+    iframe.setAttribute('loading', 'lazy');
+    iframe.setAttribute('allow', 'autoplay');
+    slot.replaceChildren(iframe);
+  });
+}
+
+function stopReleaseAudio() {
+  document.querySelectorAll('#release-content iframe').forEach(frame => frame.remove());
+}
+
 function showRelease(key) {
   const r = releases[key];
   if (!r) return;
   let html = `<div class="release-header">${r.title}<br>`;
   html += `</div>`;
-  if (r.buy) html += `<div><a href="${r.buy}" target="_blank" class="icon-btn" title="Buy"><i data-feather="shopping-cart"></i></a>`;
-  if (r.listen) html += `<div><a href="${r.listen}" target="_blank" class="icon-btn" title="Listen"><i data-feather="volume-2"></i></a>`;
-  html += `</div>`;
+  if (r.buy || r.listen) {
+    html += `<div>`;
+    if (r.buy) html += `<a href="${r.buy}" target="_blank" rel="noopener noreferrer" class="icon-btn" title="Buy"><i data-feather="shopping-cart"></i></a>`;
+    if (r.listen) html += `<a href="${r.listen}" target="_blank" rel="noopener noreferrer" class="icon-btn" title="Listen"><i data-feather="volume-2"></i></a>`;
+    html += `</div>`;
+  }
   html += `<div class="release-body">${r.body}</div>`;
   if (r.meta) html += `<div class="release-meta">${r.meta}</div>`;
+  html += `<div class="release-players" id="release-players"></div>`;
  
   document.getElementById('release-content').innerHTML = html;
+  document.getElementById('release-content').dataset.releaseKey = key;
   feather.replace();
   closeAll(false);
   document.getElementById('overlay-release').classList.add('open');
+  renderBandcampPlayers(key, r);
 
   const imgSrc = localImgs[key] || 'images/' + key + '.jpg';
   startFlyingObject(key);
@@ -897,6 +1222,7 @@ function showOverlay(name) {
 }
 
 function closeOverlay(name) {
+  if (name === 'release') stopReleaseAudio();
   const panel = document.querySelector(`#overlay-${name} .overlay-panel`);
   if (panel) {
     panel.classList.add('closing');
@@ -909,6 +1235,7 @@ function closeOverlay(name) {
 }
  
 function closeAll(full = true) {
+  stopReleaseAudio();
   document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open'));
   stopFlyingObject();
 }
